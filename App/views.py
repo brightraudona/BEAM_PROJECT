@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.shortcuts import render
 from App.models import Activity, Challenge
 from folium import folium
+import requests
 
 # Create your views here.
 def home(request):
