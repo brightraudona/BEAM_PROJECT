@@ -33,9 +33,11 @@ def home(request):
                             start_date = activities_json[0]['start_date'],
                             distance = activities_json[0]['distance'],
                             duration = timedelta(seconds=activities_json[0]['elapsed_time']))
+            challenge = Challenge.objects.all()
+
         data = {
             "user":request.user,
             "main_map":main_map_html,
-            "challanges":["1","2","3","4","5","6"]
+            "challanges":challenge
         }
         return render(request, 'home.html', data)

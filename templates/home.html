@@ -4,7 +4,7 @@
   <!--Begin Map Container-->
   <ul>
     {% for challange in challanges %}
-        <li>{{ challange | safe }}</li>
+        <li><button>{{ challange.name | safe }}</button></li>
     {% endfor %}
   </ul>
   <div class="container">
