@@ -15,15 +15,8 @@
     </head>
     <body>
         <div>
-            {% if user.is_superuser %}
-                <a class="btn btn-primary" role="button"
-                    aria-disabled="true">Management</a>
-            {% endif %}
             <a class="btn btn-primary" role="button"
-                aria-disabled="true">My  Page</a>
-            <a class="btn btn-primary" role="button"
-                aria-disabled="true">About Us</a>
-            {{ user }}
+                aria-disabled="true">{{ user.first_name }}</a>
             <a href="{% url 'logout' %}" class="btn btn-primary" role="button"
                 aria-disabled="true">Logout</a>
         </div>  
