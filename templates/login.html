@@ -1,19 +1,26 @@
-{% extends 'index.html' %} 
-{% block header %}
+{% extends 'index.html' %} {% block header %}
 <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand">BEAM</a>
+  <a class="navbar-brand">BEAM</a>
 </nav>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="jumbotron">
-    <h1 class="display-4 text-center">Hi, challengers!</h1>
-    <p class="lead text-center">This is a simple Django app with custom strava challenges</p>
-    <hr class="my-4">
-    <form class="form-inline my-2 my-lg-0 d-flex justify-content-center">
-        <a href="{% url 'social:begin' 'strava' %}" role="button"
-      aria-disabled="true">
-      {% include 'svg/btn_strava_connectwith_orange.svg' %}
+  {% load static %}
+  <h1 class="display-4 text-center">Hi, challengers!</h1>
+  <p class="lead text-center">
+    This is a simple Django app with custom strava challenges
+  </p>
+  <hr class="my-4" />
+  <form class="form-inline my-2 my-lg-0 d-flex justify-content-center">
+    <a
+      href="{% url 'social:begin' 'strava' %}"
+      role="button"
+      aria-disabled="true"
+    >
+      <img
+        src="{% static 'svg/btn_strava_connectwith_orange.svg' %}"
+        alt="strava button"
+      />
     </a>
-    </form>
-  </div>
+  </form>
+</div>
 {% endblock %}
