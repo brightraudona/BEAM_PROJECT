@@ -2,14 +2,26 @@
 
 {% block content %}
 <!-- Begin activity list-->
-<div class="card" style="width: 18rem">
-    <div class="card-header">&larr;Activities</div>
-    <ul class="list-group list-group-flush">
-      {% for activity in activities %}
-      <li class="list-group-item">
-        {{ activity.name | safe }}
-      </li>
-      {% endfor %}
-    </ul>
+<h2 class="mx-auto mt-5" style="text-align:center">{{ challenge.name }}</h2>
+<p class="mx-auto mt-5" style="text-align:center">{{ challenge.description }}</p>
+<div class="card mx-auto mt-5" style="width:70%">
+    <div class="card-header">
+        <div class="row font-weight-bold">
+            <div class="col-2">Name</div>
+            <div class="col">Activity</div>
+            <div class="col-2">Distance</div>
+            <div class="col-2">Duration</div>
+        </div>
+    </div>
+    {% for activity in activities %}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2">{{ activity.athlete.first_name }}</div>
+            <div class="col">{{ activity.name }}</div>
+            <div class="col-2">{{ activity.distance }}</div>
+            <div class="col-2">{{ activity.duration }}</div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

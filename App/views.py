@@ -44,9 +44,11 @@ def home(request):
     
 
 def challenge(request, challengeId):
-    activities = Challenge.objects.get(id=challengeId).activities.all()
+    challenge = Challenge.objects.get(id=challengeId)
+    activities = challenge.activities.all()
     data = {
-        "activities":activities
+        "activities":activities,
+        "challenge":challenge
     }
     return render(request, 'challenge.html', data)
 
