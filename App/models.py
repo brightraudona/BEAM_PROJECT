@@ -17,6 +17,7 @@ class Challenge(models.Model):
     end_date = models.DateTimeField()
     sport_type = models.TextField(default="")
     activities = models.ManyToManyField(Activity, related_name='challenges')
+    participants = models.ManyToManyField(User, related_name='challenges')
 
     def get_total_distance(self):
         return sum([activity.distance for activity in self.activities.all()])
