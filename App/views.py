@@ -11,17 +11,16 @@ def home(request):
     main_map_html = main_map._repr_html_() # Get HTML for website
 
     if request.user.is_anonymous:
-        return render(request, 'index.html')
+        return render(request, 'login.html')
     else:
         user = request.user # Pulls in the Strava User data
         strava_login = user.social_auth.get(provider='strava') # Strava login
         access_token = strava_login.extra_data['access_token'] # Strava Access token
         activites_url = "https://www.strava.com/api/v3/athlete/activities"
-
         # Get activity data
         header = {'Authorization': 'Bearer ' + str(access_token)}
         activity_df_list = []
-        for n in range(200):  # Change this to be higher if you have more than 1000 activities
+        for n in range(5):  # Change this to be higher if you have more than 1000 activities
             param = {'per_page': 200, 'page': n + 1}
 
             activities_json = requests.get(activites_url, headers=header, params=param).json()
@@ -36,6 +35,7 @@ def home(request):
                             duration = timedelta(seconds=activities_json[0]['elapsed_time']))
         data = {
             "user":request.user,
-            "main_map":main_map_html
+            "main_map":main_map_html,
+            "challanges":["1","2","3","4","5","6"]
         }
-        return render(request, 'index.html', data)
+        return render(request, 'home.html', data)
