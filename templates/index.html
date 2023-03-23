@@ -8,7 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -19,21 +19,23 @@
     <title>BEAM</title>
   </head>
   <body>
+    {% block header %}
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand">BEAM</a>
-      <div class="row">
+      <div class="row mr-1">
         <a class="btn" role="button">
           {{ user.first_name }} {{ user.last_name }}
         </a>
         <a
-        href="{% url 'logout' %}"
-        class="btn btn-primary text-right"
-        role="button"
-      >
-        Logout
-      </a>
+          href="{% url 'logout' %}"
+          class="btn btn-primary text-right"
+          role="button"
+        >
+          Logout
+        </a>
       </div>
     </nav>
+    {% endblock %}
     <div>{% block content %} {% endblock %}</div>
   </body>
 </html>
