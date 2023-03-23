@@ -12,13 +12,11 @@ def home(request):
 
     if request.user.is_anonymous:
         return render(request, 'login.html')
-    
     else:
         user = request.user # Pulls in the Strava User data
         strava_login = user.social_auth.get(provider='strava') # Strava login
         access_token = strava_login.extra_data['access_token'] # Strava Access token
         activites_url = "https://www.strava.com/api/v3/athlete/activities"
-
         # Get activity data
         header = {'Authorization': 'Bearer ' + str(access_token)}
         activity_df_list = []
@@ -35,7 +33,6 @@ def home(request):
                             start_date = activities_json[0]['start_date'],
                             distance = activities_json[0]['distance'],
                             duration = timedelta(seconds=activities_json[0]['elapsed_time']))
-
         data = {
             "user":request.user,
             "main_map":main_map_html,
