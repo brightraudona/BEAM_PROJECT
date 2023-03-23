@@ -2,7 +2,7 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
-    path('', base_map, name='Base Map View'),
-    path('connected/', connected_map, name='Connect Map View'),
+    path('', home, name='home'),
+    path('connected/', connected_strava, name='Connect to stravia'),
     path('oauth/', include('social_django.urls', namespace='social')),
 ]

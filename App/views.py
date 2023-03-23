@@ -2,7 +2,7 @@ from django.shortcuts import render
 import requests
 
 # Create your views here.
-def base_map(request):
+def home(request):
     # Make your map object
     # main_map = folium.Map(location=[43.45, -80.476], zoom_start = 12) # Create base map
     # main_map_html = main_map._repr_html_() # Get HTML for website
@@ -12,7 +12,7 @@ def base_map(request):
     # }
     return render(request, 'index.html')
 
-def connected_map(request):
+def connected_strava(request):
     # # Get activity data
     # header = {'Authorization': 'Bearer ' + str(access_token)}
     # activity_df_list = []
