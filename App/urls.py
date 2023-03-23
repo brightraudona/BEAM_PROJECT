@@ -8,4 +8,5 @@ urlpatterns = [
     path('', home, name='home'),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('logout/', LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name='logout'),
+    path('challenge/<challengeId>', challenge, name='challenge' )
 ]

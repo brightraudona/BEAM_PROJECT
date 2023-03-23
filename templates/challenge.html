@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<!-- Begin activity list-->
+<div class="card" style="width: 18rem">
+    <div class="card-header">&larr;Activities</div>
+    <ul class="list-group list-group-flush">
+      {% for activity in activities %}
+      <li class="list-group-item">
+        {{ activity.name | safe }}
+      </li>
+      {% endfor %}
+    </ul>
+</div>
+{% endblock %}

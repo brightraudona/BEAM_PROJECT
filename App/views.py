@@ -21,7 +21,7 @@ def home(request):
         header = {'Authorization': 'Bearer ' + str(access_token)}
         activity_df_list = []
         for n in range(5):  # Change this to be higher if you have more than 1000 activities
-            param = {'per_page': 200, 'page': n + 1}
+            param = {'per_page': 5, 'page': n + 1}
 
             activities_json = requests.get(activites_url, headers=header, params=param).json()
             if not activities_json:
@@ -38,6 +38,15 @@ def home(request):
         data = {
             "user":request.user,
             "main_map":main_map_html,
-            "challanges":challenge
+            "challenges":challenge
         }
         return render(request, 'home.html', data)
+    
+
+def challenge(request, challengeId):
+    activities = Challenge.objects.get(id=challengeId).activities.all()
+    data = {
+        "activities":activities
+    }
+    return render(request, 'challenge.html', data)
+
