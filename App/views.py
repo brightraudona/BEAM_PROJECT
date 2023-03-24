@@ -1,6 +1,5 @@
 import datetime
 import threading
-import schedule
 import time
 from App.sync import sync
 from django.shortcuts import render
