@@ -37,10 +37,10 @@ def home(request):
 
 
 def challenge(request, challengeId):
-    _ = sync(request.user, True)
+    data = sync(request.user, True)
+    
     challenge = Challenge.objects.get(id=challengeId)
     activities = challenge.activities.all()
-
 
     if challenge.type == 'Time':
         activities = activities.order_by('-duration')
@@ -63,7 +63,6 @@ def challenge(request, challengeId):
                     'total':sum([activity.distance for activity in challenge.activities.filter(athlete=p, start_date__gte=challenge.start_date)])
                 })
 
-
     data = {
         "activities":activities,
         "challenge":challenge,
@@ -80,7 +79,7 @@ def join_challenge(request):
 
         # Filter activities by sport_type
         sport_type = challenge.sport_type
-        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type, start_date__lt=challenge.start_date)
+        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type, start_date__gte=challenge.start_date)
         
         # Add filtered activities to the challenge
         challenge.activities.add(*activities)

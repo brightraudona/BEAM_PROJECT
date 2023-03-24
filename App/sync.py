@@ -31,19 +31,17 @@ def sync(user, first):
     challenges = Challenge.objects.all()
 
     # sync activites
-    if old_count_activities < len(activity_df_list):
-        for challenge in challenges:
-            if user in challenge.participants.all():
-                print(Activity.objects.count())
-                existing_activities = challenge.activities.filter(athlete=user, sport_type=challenge.sport_type)
-                new_activities = Activity.objects.filter(athlete=user, sport_type=challenge.sport_type, start_date__lt=challenge.start_date).exclude(id__in=existing_activities)
-                print(existing_activities.count())
-                print(new_activities.count())
-                challenge.activities.add(*new_activities)
-                challenge.save()
+    #if old_count_activities < len(activity_df_list):
+    for challenge in challenges:
+        if user in challenge.participants.all():
+            print(Activity.objects.count())
+            existing_activities = challenge.activities.filter(athlete=user, sport_type=challenge.sport_type)
+            new_activities = Activity.objects.filter(athlete=user, sport_type=challenge.sport_type, start_date__gte=challenge.start_date).exclude(id__in=existing_activities)
+            print(existing_activities.count())
+            print(new_activities.count())
+            challenge.activities.add(*new_activities)
+            challenge.save()
 
-    if not first:
-        time.sleep(0.2)
     return {
         "user":user,
         "challenges":challenges,
