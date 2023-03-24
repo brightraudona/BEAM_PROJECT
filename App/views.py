@@ -1,8 +1,11 @@
-from datetime import timedelta
+import datetime
+import threading
+import schedule
+import time
+from App.sync import sync
 from django.shortcuts import render
 from App.models import Activity, Challenge
 from folium import folium
-import requests
 
 # Create your views here.
 def home(request):
@@ -13,70 +16,68 @@ def home(request):
     if request.user.is_anonymous:
         return render(request, 'login.html')
     else:
-        user = request.user # Pulls in the Strava User data
-        strava_login = user.social_auth.get(provider='strava') # Strava login
-        access_token = strava_login.extra_data['access_token'] # Strava Access token
-        activites_url = "https://www.strava.com/api/v3/athlete/activities"
-        # Get activity data
-        header = {'Authorization': 'Bearer ' + str(access_token)}
-        old_count_activities = Activity.objects.count()
-        activity_df_list = []
-        for n in range(5):  # Change this to be higher if you have more than 1000 activities
-            param = {'per_page': 10, 'page': n + 1}
-            activities_json = requests.get(activites_url, headers=header, params=param).json()
+        data = sync(request.user, True)
+        data["main_map"] = main_map_html
 
-            if not activities_json:
-                break
-            for activity in activities_json:
-                activity_df_list.append(activity)
-                Activity.objects.update_or_create(name=activity['name'],
-                                              activity_id=activity['id'],
-                                              athlete=user,
-                                              start_date=activity['start_date'],
-                                              distance=activity['distance'],
-                                              sport_type=activity['sport_type'],
-                                              duration=timedelta(seconds=activity['elapsed_time']))
+        def thread_callback(result):
+            # Render the template with the result
+            result["main_map"] = main_map_html
+            print("task done")
+            return render(request, 'index.html', result)
+        
+        # Start the long-running task in a separate thread
+        thread = threading.Thread(target=sync(request.user, False))
+        thread.daemon = True
+        request.thread_callback = thread_callback
+        thread.start()
 
-        challenges = Challenge.objects.all()
-
-        # sync activites
-        if old_count_activities < len(activity_df_list):
-            for challenge in challenges:
-                if user in challenge.participants.all():
-                    print(Activity.objects.count())
-                    existing_activities = challenge.activities.filter(athlete=user, sport_type=challenge.sport_type)
-                    new_activities = Activity.objects.filter(athlete=user, sport_type=challenge.sport_type).exclude(id__in=existing_activities)
-                    print(existing_activities.count())
-                    print(new_activities.count())
-                    challenge.activities.add(*new_activities)
-                    challenge.save()
-
-        data = {
-            "user":request.user,
-            "main_map":main_map_html,
-            "challenges":challenges,
-            "ID":request.user.id
-        }
         return render(request, 'home.html', data)
     
 
 def challenge(request, challengeId):
+    _ = sync(request.user, True)
     challenge = Challenge.objects.get(id=challengeId)
     activities = challenge.activities.all()
+
+
+    if challenge.type == 'Time':
+        activities = activities.order_by('-duration')
+    elif challenge.type == 'Distance':
+        activities = activities.order_by('-distance')
+
+    user_totals = []
+    if challenge.type == 'Time':
+        for p in challenge.participants.all():
+            if not p.first_name == '':
+                user_totals.append({
+                    'name':p.first_name,
+                    'total':sum([activity.duration.total_seconds() for activity in challenge.activities.filter(athlete=p, start_date__gte=challenge.start_date)])
+                })
+    elif challenge.type == 'Distance':
+        for p in challenge.participants.all():
+            if not p.first_name == '':
+                user_totals.append({
+                    'name':p.first_name,
+                    'total':sum([activity.distance for activity in challenge.activities.filter(athlete=p, start_date__gte=challenge.start_date)])
+                })
+
+
     data = {
         "activities":activities,
-        "challenge":challenge
+        "challenge":challenge,
+        "totals":user_totals
     }
     return render(request, 'challenge.html', data)
 
 def join_challenge(request):
+    _ = sync(request.user, True)
     if request.method == 'POST':
         challenge_id = request.POST.get('challenge_id')
         challenge = Challenge.objects.get(id=challenge_id)
 
         # Filter activities by sport_type
         sport_type = challenge.sport_type
-        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type)
+        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type, start_date__lt=challenge.start_date)
         
         # Add filtered activities to the challenge
         challenge.activities.add(*activities)
@@ -86,6 +87,7 @@ def join_challenge(request):
         return home(request)
 
 def leave_challenge(request):
+    _ = sync(request.user, True)
     if request.method == 'POST':
         challenge_id = request.POST.get('challenge_id')
         challenge = Challenge.objects.get(id=challenge_id)

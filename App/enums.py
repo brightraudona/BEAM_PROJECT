@@ -30,3 +30,7 @@ class SportType(Enum):
     WINDSURF = 'Windsurf'
     WORKOUT = 'Workout'
     YOGA = 'Yoga'
+
+class ChallengeType(Enum):
+    DISTANCE = 'Distance'
+    TIME = 'Time'

@@ -4,10 +4,30 @@
 <!-- Begin activity list-->
 <h2 class="mx-auto mt-5" style="text-align:center">{{ challenge.name }}</h2>
 <p class="mx-auto mt-5" style="text-align:center">{{ challenge.description }}</p>
+<h5 class="mx-auto mt-5" style="text-align:center">{{ challenge.type }} challenge
+</h5>
 <h5 class="mx-auto mt-5" style="text-align:center">{{ challenge.start_date|date:"Y-m-d H:i" }}
     &nbsp;&nbsp;-&nbsp;&nbsp;{{ challenge.end_date|date:"Y-m-d H:i" }}
 </h5>
 <div class="card mx-auto mt-5" style="width:70%">
+    <div class="card-header">
+        <div class="row font-weight-bold">
+            <div class="col-2">Name</div>
+            <div class="col">Total</div>
+        </div>
+    </div>
+    {% for total in totals %}
+        {% if activity.athlete == request.user %}
+        <div class="card-body" style="color:#5a78ff">
+        {% else %}
+        <div class="card-body">
+        {% endif %}
+            <div class="row">
+                <div class="col-2">{{ total.name }}</div>
+                <div class="col">{{ total.total }}</div>
+            </div>
+        </div>
+    {% endfor %}
     <div class="card-header">
         <div class="row font-weight-bold">
             <div class="col-2">Name</div>
