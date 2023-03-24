@@ -21,7 +21,9 @@
   <body>
     {% block header %}
     <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand">BEAM</a>
+      <a class="navbar-brand">
+        <img src="{% static 'svg/logo.svg' %}" class="brand_img" height="40" width="70">
+        Acitve Unity</a>
       <div class="row mr-1">
         <a class="btn" role="button">
           {{ user.first_name }} {{ user.last_name }}
