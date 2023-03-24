@@ -22,13 +22,13 @@ def home(request):
         old_count_activities = Activity.objects.count()
         activity_df_list = []
         for n in range(5):  # Change this to be higher if you have more than 1000 activities
-            param = {'per_page': 200, 'page': n + 1}
-
+            param = {'per_page': 10, 'page': n + 1}
             activities_json = requests.get(activites_url, headers=header, params=param).json()
+
             if not activities_json:
                 break
-            activity_df_list.append(activities_json)
             for activity in activities_json:
+                activity_df_list.append(activity)
                 Activity.objects.update_or_create(name=activity['name'],
                                               activity_id=activity['id'],
                                               athlete=user,
@@ -40,7 +40,7 @@ def home(request):
         challenges = Challenge.objects.all()
 
         # sync activites
-        if old_count_activities < len(activity_df_list[0]):
+        if old_count_activities < len(activity_df_list):
             for challenge in challenges:
                 if user in challenge.participants.all():
                     print(Activity.objects.count())

@@ -3,11 +3,21 @@
   <div class="row">
     <div class="col">
       <div class="card">
-        <div class="card-header">Challenges</div>
-        <ul class="list-group list-group-flush">
+        <div class="card-header">
+          <div class="row font-weight-bold">
+              <div class="col">Name</div>
+              <div class="col">Sport</div>
+              <div class="col">Ending</div>
+              <div class="col-1"></div>
+          </div>
+        </div>
           {% for challenge in challenges %}
-            <li class="list-group-item">
-                <a href="{% url 'challenge' challenge.id %}" aria-disabled="true">{{ challenge.name | safe }}</a>
+            <div class="card-body">
+              <div class="row">
+                <div class="col"><a href="{% url 'challenge' challenge.id %}" aria-disabled="true">{{ challenge.name | safe }}</a></div>
+                <div class="col">{{ challenge.sport_type }}</div>
+                <div class="col">{{ challenge.end_date }}</div>
+                <div class="col-1">
                   {% if request.user in challenge.participants.all %}
                     <form method="post" class="float-right" action="{% url 'leave_challenge' %}">
                       <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
@@ -25,12 +35,13 @@
                       </button>
                     </form>
                   {% endif %}
-            </li>
+              </div>
+            </div>
+          </div>
           {% endfor %}
-        </ul>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col-6">
       <div class="map-container">
           {{ main_map|safe }}
       </div>
