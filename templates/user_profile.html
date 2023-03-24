@@ -1,0 +1,36 @@
+{% extends 'index.html' %} {% block content %}
+<div class="container mt-3 w-50">
+<ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Username
+        <span class="badge">
+            {{ user.username }}
+        </span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Date joined
+        <span class="badge">
+            {{ user.date_joined }}
+        </span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Last login
+        <span class="badge">
+            {{ user.last_login }}
+        </span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Challenges
+      <span class="badge badge-primary badge-pill">
+        {{ challenges|length }}
+      </span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Activities
+      <span class="badge badge-primary badge-pill">
+        {{ activities|length }}
+      </span>
+    </li>
+  </ul>
+</div>
+{% endblock %}
