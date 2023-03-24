@@ -32,13 +32,16 @@ def home(request):
                             athlete = user,
                             start_date = activities_json[0]['start_date'],
                             distance = activities_json[0]['distance'],
+                            sport_type = activities_json[0]['sport_type'],
                             duration = timedelta(seconds=activities_json[0]['elapsed_time']))
 
         challenge = Challenge.objects.all()
+        
         data = {
-            "user":user,
+            "user":request.user,
             "main_map":main_map_html,
-            "challenges":challenge
+            "challenges":challenge,
+            "ID":request.user.id
         }
         return render(request, 'home.html', data)
     
@@ -52,3 +55,19 @@ def challenge(request, challengeId):
     }
     return render(request, 'challenge.html', data)
 
+def join_challenge(request):
+    if request.method == 'POST':
+        challenge_id = request.POST.get('challenge_id')
+        challenge = Challenge.objects.get(id=challenge_id)
+        challenge.participants.add(request.user)
+
+        # Filter activities by sport_type
+        sport_type = challenge.sport_type
+        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type)
+        
+        # Add filtered activities to the challenge
+        challenge.activities.add(*activities)
+        challenge.participants.add(request.user)
+        challenge.save()
+
+        return home(request)
