@@ -4,16 +4,3 @@
     border: 3px solid green;
     padding: 10px;
 }
-.img {
-    width:50%;
-    z-index: 0;
-}
-
-.text-over-img {
-    z-index:1;
-    margin-top: -100px;
-    text-align: center;
-    font-size: 3.5rem;
-    font-weight: 300;
-    line-height: 1.2;
-}
