@@ -19,28 +19,42 @@ def home(request):
         activites_url = "https://www.strava.com/api/v3/athlete/activities"
         # Get activity data
         header = {'Authorization': 'Bearer ' + str(access_token)}
+        old_count_activities = Activity.objects.count()
         activity_df_list = []
         for n in range(5):  # Change this to be higher if you have more than 1000 activities
-            param = {'per_page': 5, 'page': n + 1}
+            param = {'per_page': 200, 'page': n + 1}
 
             activities_json = requests.get(activites_url, headers=header, params=param).json()
             if not activities_json:
                 break
             activity_df_list.append(activities_json)
-            Activity.objects.update_or_create(name = activities_json[0]['name'],
-                            activity_id = activities_json[0]['id'],
-                            athlete = user,
-                            start_date = activities_json[0]['start_date'],
-                            distance = activities_json[0]['distance'],
-                            sport_type = activities_json[0]['sport_type'],
-                            duration = timedelta(seconds=activities_json[0]['elapsed_time']))
+            for activity in activities_json:
+                Activity.objects.update_or_create(name=activity['name'],
+                                              activity_id=activity['id'],
+                                              athlete=user,
+                                              start_date=activity['start_date'],
+                                              distance=activity['distance'],
+                                              sport_type=activity['sport_type'],
+                                              duration=timedelta(seconds=activity['elapsed_time']))
 
-        challenge = Challenge.objects.all()
-        
+        challenges = Challenge.objects.all()
+
+        # sync activites
+        if old_count_activities < len(activity_df_list[0]):
+            for challenge in challenges:
+                if user in challenge.participants.all():
+                    print(Activity.objects.count())
+                    existing_activities = challenge.activities.filter(athlete=user, sport_type=challenge.sport_type)
+                    new_activities = Activity.objects.filter(athlete=user, sport_type=challenge.sport_type).exclude(id__in=existing_activities)
+                    print(existing_activities.count())
+                    print(new_activities.count())
+                    challenge.activities.add(*new_activities)
+                    challenge.save()
+
         data = {
             "user":request.user,
             "main_map":main_map_html,
-            "challenges":challenge,
+            "challenges":challenges,
             "ID":request.user.id
         }
         return render(request, 'home.html', data)
@@ -59,7 +73,6 @@ def join_challenge(request):
     if request.method == 'POST':
         challenge_id = request.POST.get('challenge_id')
         challenge = Challenge.objects.get(id=challenge_id)
-        challenge.participants.add(request.user)
 
         # Filter activities by sport_type
         sport_type = challenge.sport_type
