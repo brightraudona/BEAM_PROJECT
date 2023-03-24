@@ -1,0 +1,46 @@
+#header {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #DEE4FF;
+    color: #3C3246;
+    overflow: hidden;
+}
+#branding h1 {
+    padding: 0;
+    margin: 0 20px 0 0;
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: #3C3246;
+}
+#header a:link, #header a:visited, #logout-form button {
+    color: #3C3246;
+}
+.module h2, .module caption, .inline-group h2 {
+    margin: 0;
+    padding: 8px;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    text-align: left;
+    background: #DEE4FF;
+    color: var(--header-link-color);
+}
+a.section:link, a.section:visited {
+    color: #3C3246;
+    text-decoration: none;
+}
+a:link, a:visited {
+    color: #312939;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+}
+div.breadcrumbs {
+    background: #635B6B;
+    padding: 10px 40px;
+    border: none;
+    color: var(--breadcrumbs-fg);
+    text-align: left;
+}

@@ -1,13 +1,18 @@
 {% extends 'index.html' %} {% block header %}
+{% load static %}
 <nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand">BEAM</a>
+    <a class="navbar-brand">
+        <img src="{% static 'svg/logo.svg' %}" class="brand_img" height="40" width="70">
+        Acitve Unity
+    </a>
 </nav>
 {% endblock %} {% block content %}
 <div class="jumbotron">
-  {% load static %}
-  <h1 class="display-4 text-center">Hi, challengers!</h1>
+    {% comment %} <img src="{% static 'img/hiking.jpg' %}" class="img" width="100"> {% endcomment %}
+  <p class="display-4 text-center">Hi, challengers!</p>
   <p class="lead text-center">
-    This is a simple Django app with custom strava challenges
+    {% comment %} This is a simple Django app with custom strava challenges {% endcomment %}
+    Fit in Healthy harmony at work!
   </p>
   <hr class="my-4" />
   <form class="form-inline my-2 my-lg-0 d-flex justify-content-center">
