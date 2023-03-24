@@ -84,3 +84,19 @@ def join_challenge(request):
         challenge.save()
 
         return home(request)
+
+def leave_challenge(request):
+    if request.method == 'POST':
+        challenge_id = request.POST.get('challenge_id')
+        challenge = Challenge.objects.get(id=challenge_id)
+
+        # Filter activities by sport_type
+        sport_type = challenge.sport_type
+        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type)
+        
+        # Add filtered activities to the challenge
+        challenge.activities.remove(*activities)
+        challenge.participants.remove(request.user)
+        challenge.save()
+
+        return home(request)

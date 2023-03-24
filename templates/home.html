@@ -7,20 +7,24 @@
         <ul class="list-group list-group-flush">
           {% for challenge in challenges %}
             <li class="list-group-item">
-              <form method="post" action="{% url 'join_challenge' %}">
-                {% csrf_token %}
-                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                 <a href="{% url 'challenge' challenge.id %}" aria-disabled="true">{{ challenge.name | safe }}</a>
                   {% if request.user in challenge.participants.all %}
-                    <button type="submit" class="btn btn-primary btn-sm float-right" disabled>
-                      Join
-                    </button>
+                    <form method="post" class="float-right" action="{% url 'leave_challenge' %}">
+                      <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-sm float-right">
+                        Leave
+                      </button>
+                    </form>
                   {% else %}
-                    <button type="submit" class="btn btn-primary btn-sm float-right">
-                      Join
-                    </button>
+                    <form method="post" class="float-right" action="{% url 'join_challenge' %}">
+                      <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary btn-sm float-right">
+                        Join
+                      </button>
+                    </form>
                   {% endif %}
-              </form>
             </li>
           {% endfor %}
         </ul>

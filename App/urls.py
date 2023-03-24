@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name='logout'),
     path('challenge/<challengeId>', challenge, name='challenge' ),
     path('join_challenge/', join_challenge, name='join_challenge'),
+    path('leave_challenge/', leave_challenge, name='leave_challenge'),
 ]
