@@ -9,5 +9,6 @@ class ChallengeForm(forms.ModelForm):
 
 class ChallengeAdmin(admin.ModelAdmin):
     form = ChallengeForm
+    list_display = ('name', 'sport_type', 'start_date', 'end_date')
 
 admin.site.register(Challenge, ChallengeAdmin)
