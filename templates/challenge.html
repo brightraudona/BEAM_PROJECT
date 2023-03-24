@@ -43,7 +43,10 @@
         <div class="card-body">
         {% endif %}
             <div class="row">
-                <div class="col-2">{{ activity.athlete.first_name }}</div>
+                <div class="col-2">
+                    {{ activity.athlete.first_name }}
+                    {{ activity.athlete.last_name }}
+                </div>
                 <div class="col">{{ activity.name }}</div>
                 <div class="col-2">{{ activity.distance }}</div>
                 <div class="col-2">{{ activity.duration }}</div>

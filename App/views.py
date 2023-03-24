@@ -8,10 +8,13 @@ from App.models import Activity, Challenge
 from folium import folium
 
 # Create your views here.
+
+
 def home(request):
     # Make your map object
-    main_map = folium.Map(location=[54.6872, 25.2797], zoom_start = 12) # Create base map
-    main_map_html = main_map._repr_html_() # Get HTML for website
+    main_map = folium.Map(
+        location=[54.6872, 25.2797], zoom_start=12)  # Create base map
+    main_map_html = main_map._repr_html_()  # Get HTML for website
 
     if request.user.is_anonymous:
         return render(request, 'login.html')
@@ -32,7 +35,7 @@ def home(request):
         thread.start()
 
         return render(request, 'home.html', data)
-    
+
 
 def challenge(request, challengeId):
     _ = sync(request.user, True)
@@ -69,6 +72,7 @@ def challenge(request, challengeId):
     }
     return render(request, 'challenge.html', data)
 
+
 def join_challenge(request):
     _ = sync(request.user, True)
     if request.method == 'POST':
@@ -86,6 +90,7 @@ def join_challenge(request):
 
         return home(request)
 
+
 def leave_challenge(request):
     _ = sync(request.user, True)
     if request.method == 'POST':
@@ -94,11 +99,25 @@ def leave_challenge(request):
 
         # Filter activities by sport_type
         sport_type = challenge.sport_type
-        activities = Activity.objects.filter(athlete=request.user, sport_type=sport_type)
-        
+        activities = Activity.objects.filter(
+            athlete=request.user, sport_type=sport_type)
+
         # Add filtered activities to the challenge
         challenge.activities.remove(*activities)
         challenge.participants.remove(request.user)
         challenge.save()
 
         return home(request)
+
+
+def user_profile(request):
+    user_challenges = []
+    for challenge in Challenge.objects.all():
+        if request.user in challenge.participants.all():
+            user_challenges.append(challenge)
+    user_activities = Activity.objects.all()
+    data = {
+        "activities": user_activities,
+        "challenges": user_challenges
+    }
+    return render(request, 'user_profile.html', data)
