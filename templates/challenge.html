@@ -2,13 +2,24 @@
 
 {% block content %}
 <!-- Begin activity list-->
-<h2 class="mx-auto mt-5" style="text-align:center">{{ challenge.name }}</h2>
-<p class="mx-auto mt-5" style="text-align:center">{{ challenge.description }}</p>
-<h5 class="mx-auto mt-5" style="text-align:center">{{ challenge.type }} challenge
-</h5>
-<h5 class="mx-auto mt-5" style="text-align:center">{{ challenge.start_date|date:"Y-m-d H:i" }}
-    &nbsp;&nbsp;-&nbsp;&nbsp;{{ challenge.end_date|date:"Y-m-d H:i" }}
-</h5>
+<div class="card text-center">
+    <div class="card-header">
+        <h5>{{ challenge.type }} challenge</h5>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">
+        <h2>{{ challenge.name }}</h2>
+    </h5>
+      <p class="card-text">
+        <p>{{ challenge.description }}</p>
+    </p>
+    </div>
+    <div class="card-footer text-muted">
+        <h5>{{ challenge.start_date|date:"Y-m-d H:i" }}
+            &nbsp;&nbsp;-&nbsp;&nbsp;{{ challenge.end_date|date:"Y-m-d H:i" }}
+        </h5>
+    </div>
+  </div>
 <div class="card mx-auto mt-5" style="width:70%">
     <div class="card-header">
         <div class="row font-weight-bold">
